@@ -34,8 +34,8 @@
         ::-webkit-scrollbar-track { background: #1e293b; }
         ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #64748b; }
-        /* Read-only affordances */
         .readonly-note { cursor: default; }
+        .wrap-anywhere { overflow-wrap: anywhere; word-break: break-word; }
     </style>
 </head>
 <body class="min-h-screen bg-slate-900 text-slate-100 flex flex-col">
@@ -133,7 +133,7 @@
 
             <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between relative overflow-hidden group hover:border-emerald-500/50 transition">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Weekly Earnings</span>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Total Earnings</span>
                     <span class="p-2 bg-emerald-500/10 rounded-lg text-emerald-400"><i class="fa-solid fa-dollar-sign"></i></span>
                 </div>
                 <div class="mt-4 flex items-baseline">
@@ -149,7 +149,7 @@
                 <div class="flex flex-col justify-center">
                     <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Overall Progress</span>
                     <span id="overall-percentage-text" class="text-2xl font-extrabold text-white mt-1">0%</span>
-                    <span id="hours-logged-stat" class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-clock text-indigo-400 mr-1"></i>0 hrs this week</span>
+                    <span id="hours-logged-stat" class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-clock text-indigo-400 mr-1"></i>0 hrs logged</span>
                 </div>
                 <div class="relative w-20 h-20 flex-shrink-0">
                     <canvas id="kpiGaugeChart"></canvas>
@@ -191,15 +191,15 @@
                             <th class="py-3.5 px-4 w-12 text-center">Done</th>
                             <th class="py-3.5 px-4">Task Description</th>
                             <th class="py-3.5 px-4 w-32">State</th>
-                            <th class="py-3.5 px-4 w-28">Priority</th>
-                            <th class="py-3.5 px-4 w-36 text-right">Logged Hours</th>
+                            <th class="py-3.5 px-4 w-24">Priority</th>
+                            <th class="py-3.5 px-4 w-40 text-right">Hours (Logged / Target)</th>
                         </tr>
                     </thead>
                     <tbody id="task-table-body" class="divide-y divide-slate-700/50 text-slate-300"></tbody>
                 </table>
             </div>
 
-            <div class="p-4 bg-slate-900/30 border-t border-slate-700/60 text-xs text-slate-400 flex justify-between items-center">
+            <div class="p-4 bg-slate-900/30 border-t border-slate-700/60 text-xs text-slate-400 flex flex-col sm:flex-row gap-2 justify-between sm:items-center">
                 <span id="showing-tasks-count">Showing 0 tasks</span>
                 <span class="text-slate-500"><i class="fa-solid fa-lock mr-1 text-amber-400"></i>View-only mode — data cannot be modified here.</span>
             </div>
@@ -214,7 +214,7 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-700">
                         <div>
                             <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                                <i class="fa-solid fa-chart-column text-indigo-400"></i> Weekly Progress &amp; Time Summary
+                                <i class="fa-solid fa-chart-column text-indigo-400"></i> Progress &amp; Time Summary
                             </h2>
                             <p class="text-xs text-slate-400 mt-1">Detailed breakdown of accomplished deliverables and total effort spent.</p>
                         </div>
@@ -241,7 +241,8 @@
                                     <tr>
                                         <th class="py-2.5 px-3">Task Name</th>
                                         <th class="py-2.5 px-3">Status</th>
-                                        <th class="py-2.5 px-3 text-right">Logged Hrs</th>
+                                        <th class="py-2.5 px-3 text-right">Logged</th>
+                                        <th class="py-2.5 px-3 text-right">Target</th>
                                         <th class="py-2.5 px-3 text-right">Rate</th>
                                         <th class="py-2.5 px-3 text-right">Earnings</th>
                                     </tr>
@@ -249,8 +250,9 @@
                                 <tbody id="weekly-breakdown-body" class="divide-y divide-slate-700/40 text-slate-300"></tbody>
                                 <tfoot class="bg-slate-900/80 font-semibold text-white border-t border-slate-700">
                                     <tr>
-                                        <td class="py-2.5 px-3" colspan="2">Total Weekly Summary</td>
+                                        <td class="py-2.5 px-3" colspan="2">Total Summary</td>
                                         <td id="total-logged-hours" class="py-2.5 px-3 text-right text-indigo-400 font-bold">0h</td>
+                                        <td id="total-target-hours" class="py-2.5 px-3 text-right text-slate-300 font-bold">0h</td>
                                         <td class="py-2.5 px-3 text-right text-slate-400">$7.00</td>
                                         <td id="total-task-earnings" class="py-2.5 px-3 text-right text-emerald-400 font-bold">$0.00</td>
                                     </tr>
@@ -280,7 +282,7 @@
                                 <p id="report-time-text" class="text-slate-200">Calculating hours...</p>
                             </div>
                             <div class="pt-2 border-t border-slate-800">
-                                <span class="text-slate-400 font-semibold block uppercase text-[10px] tracking-wider mb-1">Weekly Earnings ($7.00/hr)</span>
+                                <span class="text-slate-400 font-semibold block uppercase text-[10px] tracking-wider mb-1">Earnings ($7.00/hr)</span>
                                 <p id="report-earnings-text" class="text-slate-200">Calculating earnings...</p>
                             </div>
                             <div class="pt-2 border-t border-slate-800">
@@ -312,24 +314,31 @@
     </div>
 
     <footer class="mt-auto border-t border-slate-800 py-4 text-center text-xs text-slate-500">
-        <p>Website Completion Project Tracker &bull; $7.00/hr &bull; Mon–Sun &bull; <span class="text-amber-400/90">View-only mode</span> — data displayed from saved records.</p>
+        <p>Website Completion Project Tracker &bull; $7.00/hr &bull; Mon–Sun &bull; <span class="text-amber-400/90">View-only mode</span> &bull; Data snapshot exported 30 Oct 2026.</p>
     </footer>
 
     <script>
         // ============================================================
-        // CONFIGURATION
+        // CONFIGURATION — data baked in from the exported tracker DB
         // ============================================================
         const HOURLY_RATE = 7.00;
+        const DATA_SNAPSHOT_AT = '2026-10-30T15:52:08.227Z';
 
-        const DEFAULT_TASKS = [
-            { id: '1', title: '1. Finalize Landing Page template', status: 'In Progress', priority: 'High', loggedHours: 5 },
-            { id: '2', title: '2. Finalize watermark logo for photos', status: 'Completed', priority: 'Medium', loggedHours: 3 },
-            { id: '3', title: '3. Update Enquiry form', status: 'Needs Revision', priority: 'High', loggedHours: 3.5 },
-            { id: '4', title: '4. Create new IG account', status: 'Completed', priority: 'Low', loggedHours: 1 },
-            { id: '5', title: '5. Update LinkedIN profile', status: 'In Progress', priority: 'Medium', loggedHours: 1.5 },
-            { id: '6', title: '6. Update Facebook profile', status: 'Pending', priority: 'Low', loggedHours: 0 },
-            { id: '7', title: '7. Post, post, post', status: 'Pending', priority: 'High', loggedHours: 2 }
-        ];
+        const DATASET = {
+            app: 'website-project-tracker',
+            version: 3,
+            hourlyRate: 7,
+            notes: '',
+            tasks: [
+                { id: '1', title: '1. Finalize Landing Pages template (Site 1 and Site 2)', status: 'Completed', priority: 'High', targetHours: 8, loggedHours: 13 },
+                { id: '2', title: '2. Finalize watermark logo for photos -  logo should be transparent', status: 'Completed', priority: 'Medium', targetHours: 8, loggedHours: 1 },
+                { id: '3', title: '3. Update Enquiry form - New Form and Logo https://docs.google.com/forms/d/1X0qC62hP31iqInB619bq41UdoSUle7sxT-TpG73P2LI/edit', status: 'Completed', priority: 'Medium', targetHours: 8, loggedHours: 3 },
+                { id: '4', title: '4. Create new IG account', status: 'Pending', priority: 'Low', targetHours: 8, loggedHours: 0 },
+                { id: '5', title: '5. Update LinkedIN profile', status: 'Pending', priority: 'Low', targetHours: 8, loggedHours: 0 },
+                { id: '6', title: '6. Update Facebook Page (Profile & Cover Image)', status: 'Completed', priority: 'Medium', targetHours: 2, loggedHours: 2 },
+                { id: '7', title: '7. Post, post, post', status: 'Pending', priority: 'Low', targetHours: 8, loggedHours: 0 }
+            ]
+        };
 
         let tasks = [];
         let gaugeChartInstance = null;
@@ -344,7 +353,9 @@
         function getTaskTotalHours() {
             return tasks.reduce((s, t) => s + (parseFloat(t.loggedHours) || 0), 0);
         }
-        function getTotalWeeklyHours() { return getTaskTotalHours(); }
+        function getTargetTotalHours() {
+            return tasks.reduce((s, t) => s + (parseFloat(t.targetHours) || 0), 0);
+        }
 
         // Initialize Application
         window.addEventListener('DOMContentLoaded', () => {
@@ -357,21 +368,20 @@
         // LOAD (READ-ONLY — nothing is written back to storage)
         // ============================================================
         function loadInitialData() {
-            const savedTasks = localStorage.getItem('web_project_tracker_tasks');
-            if (savedTasks) {
-                try {
-                    const parsed = JSON.parse(savedTasks);
-                    tasks = Array.isArray(parsed) ? parsed : JSON.parse(JSON.stringify(DEFAULT_TASKS));
-                }
-                catch (e) {
-                    tasks = JSON.parse(JSON.stringify(DEFAULT_TASKS));
-                }
-            } else {
-                tasks = JSON.parse(JSON.stringify(DEFAULT_TASKS));
-            }
+            // Reset: always start from the embedded snapshot, normalized & safe.
+            const validStatuses = ['Pending', 'In Progress', 'Needs Revision', 'Completed'];
+            const validPriorities = ['Low', 'Medium', 'High'];
 
-            const savedNotes = localStorage.getItem('web_project_tracker_notes');
-            if (savedNotes) document.getElementById('weekly-notes').value = savedNotes;
+            tasks = DATASET.tasks.map((t, i) => ({
+                id: String(t.id != null ? t.id : i + 1),
+                title: String(t.title || 'Untitled task'),
+                status: validStatuses.includes(t.status) ? t.status : 'Pending',
+                priority: validPriorities.includes(t.priority) ? t.priority : 'Medium',
+                targetHours: Math.max(0, parseFloat(t.targetHours) || 0),
+                loggedHours: Math.max(0, parseFloat(t.loggedHours) || 0)
+            }));
+
+            document.getElementById('weekly-notes').value = DATASET.notes || '';
         }
 
         // ============================================================
@@ -424,21 +434,32 @@
                 const statusBadge = getStatusBadgeHTML(t.status);
                 const priorityBadge = getPriorityBadgeHTML(t.priority);
                 const logged = parseFloat(t.loggedHours) || 0;
+                const target = parseFloat(t.targetHours) || 0;
                 const earned = logged * HOURLY_RATE;
+                const overTarget = target > 0 && logged > target;
+                const pct = target > 0 ? Math.min(100, Math.round((logged / target) * 100)) : 0;
 
                 return `
                     <tr class="hover:bg-slate-800/40 transition border-b border-slate-700/40">
                         <td class="py-3 px-4 text-center">
                             <i class="fa-solid ${isDone ? 'fa-circle-check text-emerald-400' : 'fa-circle text-slate-600'}"></i>
                         </td>
-                        <td class="py-3 px-4">
-                            <span class="font-medium text-slate-100 ${isDone ? 'line-through text-slate-400' : ''}">${escapeHtml(t.title)}</span>
+                        <td class="py-3 px-4 max-w-md">
+                            <span class="wrap-anywhere font-medium text-slate-100 ${isDone ? 'line-through decoration-slate-500 text-slate-400' : ''}">${escapeHtml(t.title)}</span>
                         </td>
                         <td class="py-3 px-4">${statusBadge}</td>
                         <td class="py-3 px-4">${priorityBadge}</td>
-                        <td class="py-3 px-4 text-right">
-                            <span class="font-semibold text-slate-200">${fmtHours(logged)}h</span>
-                            <div class="text-[10px] text-emerald-400 mt-0.5 font-medium">${formatCurrency(earned)}</div>
+                        <td class="py-3 px-4">
+                            <div class="text-right">
+                                <span class="font-semibold text-slate-200">${fmtHours(logged)}h</span>
+                                <span class="text-slate-500">/ ${fmtHours(target)}h</span>
+                                <div class="mt-1.5 h-1 w-24 bg-slate-700/80 rounded-full overflow-hidden ml-auto">
+                                    <div class="h-full ${overTarget ? 'bg-amber-500' : 'bg-indigo-500'}" style="width:${pct}%"></div>
+                                </div>
+                                <div class="text-[10px] mt-1 font-medium ${overTarget ? 'text-amber-400' : 'text-emerald-400'}">
+                                    ${formatCurrency(earned)}${overTarget ? ' • over target' : ''}
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 `;
@@ -453,7 +474,7 @@
             if (status === 'Pending') styles = "bg-slate-700/50 text-slate-400 border-slate-600/50";
 
             return `
-                <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full border ${styles} inline-flex items-center gap-1.5">
+                <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full border ${styles} inline-flex items-center gap-1.5 whitespace-nowrap">
                     <span class="w-1.5 h-1.5 rounded-full ${status === 'Completed' ? 'bg-emerald-400' : status === 'Needs Revision' ? 'bg-amber-400' : status === 'In Progress' ? 'bg-blue-400' : 'bg-slate-400'}"></span>
                     ${status}
                 </span>
@@ -470,20 +491,24 @@
         function renderWeeklyBreakdown() {
             const tbody = document.getElementById('weekly-breakdown-body');
             let totalLogged = 0;
+            let totalTarget = 0;
 
             tbody.innerHTML = tasks.map(t => {
                 const logged = parseFloat(t.loggedHours) || 0;
+                const target = parseFloat(t.targetHours) || 0;
                 totalLogged += logged;
+                totalTarget += target;
                 const earned = logged * HOURLY_RATE;
                 return `
                     <tr class="hover:bg-slate-800/30">
-                        <td class="py-2.5 px-3 font-medium text-slate-200">${escapeHtml(t.title)}</td>
+                        <td class="py-2.5 px-3 font-medium text-slate-200 wrap-anywhere">${escapeHtml(t.title)}</td>
                         <td class="py-2.5 px-3">
-                            <span class="text-[10px] px-2 py-0.5 rounded ${t.status === 'Completed' ? 'bg-emerald-950 text-emerald-400' : 'bg-slate-800 text-slate-400'}">
+                            <span class="text-[10px] px-2 py-0.5 rounded whitespace-nowrap ${t.status === 'Completed' ? 'bg-emerald-950 text-emerald-400' : 'bg-slate-800 text-slate-400'}">
                                 ${t.status}
                             </span>
                         </td>
                         <td class="py-2.5 px-3 text-right font-semibold text-indigo-400">${fmtHours(logged)}h</td>
+                        <td class="py-2.5 px-3 text-right text-slate-400">${fmtHours(target)}h</td>
                         <td class="py-2.5 px-3 text-right text-slate-400">${formatCurrency(HOURLY_RATE)}</td>
                         <td class="py-2.5 px-3 text-right text-emerald-400 font-semibold">${formatCurrency(earned)}</td>
                     </tr>
@@ -491,11 +516,13 @@
             }).join('');
 
             document.getElementById('total-logged-hours').textContent = `${fmtHours(totalLogged)}h`;
+            document.getElementById('total-target-hours').textContent = `${fmtHours(totalTarget)}h`;
             document.getElementById('total-task-earnings').textContent = formatCurrency(totalLogged * HOURLY_RATE);
         }
 
         function updateTimesheetSummary() {
-            const total = getTotalWeeklyHours();
+            const total = getTaskTotalHours();
+            const target = getTargetTotalHours();
             const earnings = total * HOURLY_RATE;
             const el = id => document.getElementById(id);
 
@@ -503,11 +530,11 @@
             if (el('kpi-weekly-hours')) el('kpi-weekly-hours').textContent = `${fmtHours(total)} hrs`;
             if (el('hours-logged-stat')) {
                 el('hours-logged-stat').innerHTML =
-                    `<i class="fa-solid fa-clock text-indigo-400 mr-1"></i>${fmtHours(total)} hrs this week`;
+                    `<i class="fa-solid fa-clock text-indigo-400 mr-1"></i>${fmtHours(total)} of ${fmtHours(target)} target hrs`;
             }
             if (el('report-earnings-text')) {
                 el('report-earnings-text').innerHTML =
-                    `<span class="text-emerald-300 font-semibold">${formatCurrency(earnings)}</span> this week ` +
+                    `<span class="text-emerald-300 font-semibold">${formatCurrency(earnings)}</span> ` +
                     `(${fmtHours(total)} hrs × ${formatCurrency(HOURLY_RATE)}/hr).`;
             }
         }
@@ -519,20 +546,33 @@
             const total = tasks.length;
             const completed = tasks.filter(t => t.status === 'Completed').length;
             const revision = tasks.filter(t => t.status === 'Needs Revision');
+            const pendingTasks = tasks.filter(t => t.status === 'Pending' || t.status === 'In Progress');
             const totalLogged = getTaskTotalHours();
+            const totalTarget = getTargetTotalHours();
+            const overTargetCount = tasks.filter(t => (parseFloat(t.loggedHours) || 0) > (parseFloat(t.targetHours) || 0)).length;
 
             document.getElementById('report-milestone-text').textContent =
                 `${completed} of ${total} project tasks completed. Overall website launch preparation is ${total > 0 ? Math.round((completed / total) * 100) : 0}% complete.`;
 
             document.getElementById('report-time-text').textContent =
-                `${fmtHours(totalLogged)} total task hours logged.`;
+                `${fmtHours(totalLogged)} hrs logged against a ${fmtHours(totalTarget)} hr target ` +
+                `(${totalTarget > 0 ? Math.round((totalLogged / totalTarget) * 100) : 0}% of plan).`;
 
             if (revision.length > 0) {
                 document.getElementById('report-action-text').innerHTML =
                     `<i class="fa-solid fa-triangle-exclamation mr-1"></i> ${revision.length} task(s) require revisions: <b>${revision.map(r => escapeHtml(r.title)).join(', ')}</b>.`;
+            } else if (pendingTasks.length > 0) {
+                document.getElementById('report-action-text').innerHTML =
+                    `<i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i> No revisions flagged. ` +
+                    `${pendingTasks.length} task(s) still open — next up: <b>${escapeHtml(pendingTasks[0].title)}</b>.`;
             } else {
                 document.getElementById('report-action-text').innerHTML =
-                    `<i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i> No items currently flagged for revision. Workflow is clear!`;
+                    `<i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i> All tasks complete. No items flagged for revision.`;
+            }
+
+            const milestones = document.getElementById('report-milestone-text');
+            if (overTargetCount > 0) {
+                milestones.textContent += ` ${overTargetCount} task(s) exceeded their target hours.`;
             }
         }
 
@@ -552,15 +592,25 @@
                 type: 'bar',
                 data: {
                     labels: [],
-                    datasets: [{ label: 'Logged Hours', data: [], backgroundColor: '#6366f1', borderRadius: 6 }]
+                    datasets: [
+                        { label: 'Logged Hours', data: [], backgroundColor: '#6366f1', borderRadius: 6 },
+                        { label: 'Target Hours', data: [], backgroundColor: '#334155', borderRadius: 6 }
+                    ]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
                     scales: {
                         x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } },
-                        y: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#334155' } }
+                        y: { beginAtZero: true, ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#334155' } }
                     },
-                    plugins: { legend: { labels: { color: '#cbd5e1', font: { size: 11 } } } }
+                    plugins: {
+                        legend: { labels: { color: '#cbd5e1', font: { size: 11 }, boxWidth: 12 } },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `${ctx.dataset.label}: ${fmtHours(ctx.parsed.y)}h`
+                            }
+                        }
+                    }
                 }
             });
         }
@@ -575,10 +625,15 @@
                 gaugeChartInstance.update();
             }
             if (hoursChartInstance) {
-                const labels = tasks.map(t => t.title.length > 18 ? t.title.substring(0, 18) + '...' : t.title);
-                const loggedData = tasks.map(t => parseFloat(t.loggedHours) || 0);
+                const labels = tasks.map((t, i) => `#${i + 1}`);
+
                 hoursChartInstance.data.labels = labels;
-                hoursChartInstance.data.datasets[0].data = loggedData;
+                hoursChartInstance.data.datasets[0].data = tasks.map(t => parseFloat(t.loggedHours) || 0);
+                hoursChartInstance.data.datasets[1].data = tasks.map(t => parseFloat(t.targetHours) || 0);
+                hoursChartInstance.options.plugins.tooltip.callbacks.title = (items) => {
+                    const idx = items[0].dataIndex;
+                    return tasks[idx] ? tasks[idx].title : items[0].label;
+                };
                 hoursChartInstance.update();
             }
         }
@@ -594,6 +649,7 @@
                 version: 3,
                 mode: 'view-only',
                 hourlyRate: HOURLY_RATE,
+                sourceSnapshotAt: DATA_SNAPSHOT_AT,
                 exportedAt: new Date().toISOString(),
                 tasks: tasks,
                 notes: document.getElementById('weekly-notes').value
