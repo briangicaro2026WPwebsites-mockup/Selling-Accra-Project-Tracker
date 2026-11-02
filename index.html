@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website Completion Project Tracker - View Only</title>
+    <title>Website Completion Project Tracker (View Only)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js for data visualization -->
@@ -34,6 +34,10 @@
         ::-webkit-scrollbar-track { background: #1e293b; }
         ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        @media print {
+            body { background: #fff !important; color: #000 !important; }
+            header, footer, .no-print { display: none !important; }
+        }
     </style>
 </head>
 <body class="min-h-screen bg-slate-900 text-slate-100 flex flex-col">
@@ -53,26 +57,36 @@
                         <span class="text-emerald-400 font-medium">$7.00/hr</span>
                         <span class="mx-1 text-slate-600">•</span>
                         <span class="text-indigo-300">Mon–Sun</span>
-                        <span class="mx-1 text-slate-600">•</span>
-                        <span class="text-amber-400 font-medium"><i class="fa-solid fa-eye mr-1"></i>View Only</span>
                     </p>
                 </div>
             </div>
 
             <div class="flex items-center space-x-2 sm:space-x-3">
-                <button onclick="window.print()" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 transition" title="Print/Export Report">
+                <span class="hidden sm:inline-flex items-center gap-2 bg-slate-900/80 border border-slate-700 text-slate-300 px-3 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider">
+                    <i class="fa-solid fa-lock text-amber-400"></i> View Only
+                </span>
+                <button onclick="window.print()" class="flex items-center space-x-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-3.5 py-2 rounded-lg text-sm font-medium border border-slate-700 transition-all active:scale-95" title="Print / Save as PDF">
                     <i class="fa-solid fa-print"></i>
+                    <span class="hidden md:inline">Print</span>
                 </button>
             </div>
         </div>
     </header>
+
+    <!-- Read-only notice -->
+    <div class="bg-indigo-500/10 border-b border-indigo-500/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center gap-2 text-[11px] sm:text-xs text-indigo-200">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>This is a read-only snapshot of the project tracker. Task data, hours and notes cannot be edited from this view.</span>
+        </div>
+    </div>
 
     <!-- Main Container -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
         <!-- Top Metrics / KPI Dashboard -->
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between relative overflow-hidden group">
+            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between relative overflow-hidden group hover:border-slate-600 transition">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Tasks</span>
                     <span class="p-2 bg-slate-700/50 rounded-lg text-slate-300"><i class="fa-solid fa-bars-staggered"></i></span>
@@ -84,7 +98,7 @@
                 <div class="absolute bottom-0 left-0 right-0 h-1 bg-slate-600"></div>
             </div>
 
-            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between relative overflow-hidden group">
+            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between relative overflow-hidden group hover:border-emerald-500/50 transition">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Completed</span>
                     <span class="p-2 bg-emerald-500/10 rounded-lg text-emerald-400"><i class="fa-solid fa-circle-check"></i></span>
@@ -96,7 +110,7 @@
                 <div class="absolute bottom-0 left-0 right-0 h-1 bg-emerald-500"></div>
             </div>
 
-            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between relative overflow-hidden group">
+            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between relative overflow-hidden group hover:border-amber-500/50 transition">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-semibold uppercase tracking-wider text-amber-400">Needs Revision</span>
                     <span class="p-2 bg-amber-500/10 rounded-lg text-amber-400"><i class="fa-solid fa-triangle-exclamation"></i></span>
@@ -108,7 +122,7 @@
                 <div class="absolute bottom-0 left-0 right-0 h-1 bg-amber-500"></div>
             </div>
 
-            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between relative overflow-hidden group">
+            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between relative overflow-hidden group hover:border-blue-500/50 transition">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-semibold uppercase tracking-wider text-blue-400">Pending / In Progress</span>
                     <span class="p-2 bg-blue-500/10 rounded-lg text-blue-400"><i class="fa-solid fa-clock"></i></span>
@@ -120,7 +134,7 @@
                 <div class="absolute bottom-0 left-0 right-0 h-1 bg-blue-500"></div>
             </div>
 
-            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between relative overflow-hidden group">
+            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between relative overflow-hidden group hover:border-emerald-500/50 transition">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Weekly Earnings</span>
                     <span class="p-2 bg-emerald-500/10 rounded-lg text-emerald-400"><i class="fa-solid fa-dollar-sign"></i></span>
@@ -146,14 +160,14 @@
             </div>
         </section>
 
-        <!-- Main Task Management Section (Read Only) -->
+        <!-- Main Task Section (read-only) -->
         <section class="bg-slate-800/60 border border-slate-700/60 rounded-xl overflow-hidden shadow-xl">
             <div class="p-5 border-b border-slate-700 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-lg font-bold text-white flex items-center gap-2">
                         <i class="fa-solid fa-list-check text-indigo-400"></i> Project Milestones &amp; Deliverables
                     </h2>
-                    <p class="text-xs text-slate-400 mt-0.5">Overview of project task statuses and logged hours.</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Read-only overview of statuses, priorities and logged effort.</p>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-3">
@@ -177,11 +191,11 @@
                 <table class="w-full text-left text-sm">
                     <thead class="bg-slate-900/50 text-slate-400 uppercase text-[11px] tracking-wider border-b border-slate-700/60">
                         <tr>
-                            <th class="py-3.5 px-4 w-12 text-center">Status</th>
+                            <th class="py-3.5 px-4 w-14 text-center">Done</th>
                             <th class="py-3.5 px-4">Task Description</th>
-                            <th class="py-3.5 px-4 w-32">State</th>
+                            <th class="py-3.5 px-4 w-36">State</th>
                             <th class="py-3.5 px-4 w-28">Priority</th>
-                            <th class="py-3.5 px-4 w-36 text-right">Logged Hours</th>
+                            <th class="py-3.5 px-4 w-40 text-right">Logged Hours</th>
                         </tr>
                     </thead>
                     <tbody id="task-table-body" class="divide-y divide-slate-700/50 text-slate-300"></tbody>
@@ -190,7 +204,7 @@
 
             <div class="p-4 bg-slate-900/30 border-t border-slate-700/60 text-xs text-slate-400 flex justify-between items-center">
                 <span id="showing-tasks-count">Showing 0 tasks</span>
-                <span class="text-slate-500"><i class="fa-solid fa-lock text-amber-400 mr-1"></i>View-only mode</span>
+                <span class="text-slate-500 flex items-center gap-1.5"><i class="fa-solid fa-lock text-[10px]"></i> Editing disabled in this view</span>
             </div>
         </section>
 
@@ -276,20 +290,26 @@
 
                     <div class="mt-6">
                         <label class="block text-xs font-semibold text-slate-300 mb-2">Weekly Notes &amp; Observations</label>
-                        <div id="weekly-notes-display" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-xs text-slate-300 min-h-[80px] whitespace-pre-wrap">No notes added yet.</div>
+                        <div id="weekly-notes-view"
+                            class="w-full bg-slate-900/60 border border-slate-700 rounded-lg p-3 text-xs text-slate-300 min-h-[6rem] whitespace-pre-wrap leading-relaxed"></div>
+                        <p class="text-[10px] text-slate-500 mt-1 flex items-center gap-1"><i class="fa-solid fa-lock text-[9px]"></i> Notes are read-only in this view.</p>
                     </div>
+
+                    <button onclick="window.print()" class="no-print mt-4 w-full bg-slate-700 hover:bg-slate-600 text-slate-100 py-2 rounded-lg text-xs font-semibold transition border border-slate-600 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-download"></i> Print / Export Full Summary
+                    </button>
                 </div>
             </div>
         </section>
     </main>
 
     <footer class="mt-auto border-t border-slate-800 py-4 text-center text-xs text-slate-500">
-        <p>Website Completion Project Tracker &bull; $7.00/hr &bull; Mon–Sun &bull; View Only Mode</p>
+        <p>Website Completion Project Tracker &bull; $7.00/hr &bull; Mon–Sun &bull; Read-only view — no data is modified or saved.</p>
     </footer>
 
     <script>
         // ============================================================
-        // CONFIGURATION & DEFAULT DATA
+        // CONFIGURATION
         // ============================================================
         const HOURLY_RATE = 7.00;
 
@@ -303,6 +323,8 @@
             { id: '7', title: '7. Post, post, post', status: 'Pending', priority: 'High', loggedHours: 2 }
         ];
 
+        const STATUS_CYCLE_ORDER = ['Pending', 'In Progress', 'Needs Revision', 'Completed'];
+
         let tasks = [];
         let gaugeChartInstance = null;
         let hoursChartInstance = null;
@@ -312,31 +334,56 @@
         // ============================================================
         function formatCurrency(n) { return '$' + (parseFloat(n) || 0).toFixed(2); }
         function fmtHours(n) { return String(parseFloat((parseFloat(n) || 0).toFixed(2))); }
-        function getTaskTotalHours() { return tasks.reduce((s, t) => s + (parseFloat(t.loggedHours) || 0), 0); }
-        function getTotalWeeklyHours() { return getTaskTotalHours(); }
 
-        // Initialize Application
+        function getTaskTotalHours() {
+            return tasks.reduce((s, t) => s + (parseFloat(t.loggedHours) || 0), 0);
+        }
+        function getTotalWeeklyHours() { return getTaskTotalHours(); }
+        function getWeeklyEarnings() { return getTotalWeeklyHours() * HOURLY_RATE; }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        }
+
+        // ============================================================
+        // INIT (read-only: reads existing data, never writes)
+        // ============================================================
         window.addEventListener('DOMContentLoaded', () => {
             loadInitialData();
             initCharts();
             renderAll();
         });
 
-        // ============================================================
-        // LOAD DATA
-        // ============================================================
         function loadInitialData() {
             const savedTasks = localStorage.getItem('web_project_tracker_tasks');
             if (savedTasks) {
-                try { tasks = JSON.parse(savedTasks); }
-                catch (e) { tasks = JSON.parse(JSON.stringify(DEFAULT_TASKS)); }
+                try {
+                    const parsed = JSON.parse(savedTasks);
+                    tasks = Array.isArray(parsed) ? parsed : JSON.parse(JSON.stringify(DEFAULT_TASKS));
+                } catch (e) {
+                    tasks = JSON.parse(JSON.stringify(DEFAULT_TASKS));
+                }
             } else {
                 tasks = JSON.parse(JSON.stringify(DEFAULT_TASKS));
             }
 
+            // Normalise so a malformed stored payload can't break rendering
+            tasks = tasks.map((t, i) => ({
+                id: String(t && t.id != null ? t.id : i),
+                title: String(t && t.title != null ? t.title : 'Untitled task'),
+                status: STATUS_CYCLE_ORDER.includes(t && t.status) ? t.status : 'Pending',
+                priority: ['Low', 'Medium', 'High'].includes(t && t.priority) ? t.priority : 'Medium',
+                loggedHours: Math.max(0, parseFloat(t && t.loggedHours) || 0)
+            }));
+
             const savedNotes = localStorage.getItem('web_project_tracker_notes');
-            if (savedNotes) {
-                document.getElementById('weekly-notes-display').textContent = savedNotes;
+            const notesEl = document.getElementById('weekly-notes-view');
+            if (savedNotes && savedNotes.trim()) {
+                notesEl.textContent = savedNotes;
+            } else {
+                notesEl.innerHTML = '<span class="text-slate-500 italic">No notes recorded for this period.</span>';
             }
         }
 
@@ -378,7 +425,8 @@
                 return matchesSearch && matchesStatus;
             });
 
-            document.getElementById('showing-tasks-count').textContent = `Showing ${filteredTasks.length} of ${tasks.length} tasks`;
+            document.getElementById('showing-tasks-count').textContent =
+                `Showing ${filteredTasks.length} of ${tasks.length} tasks`;
 
             if (filteredTasks.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-500 text-xs">No tasks found matching current filters.</td></tr>`;
@@ -387,22 +435,19 @@
 
             tbody.innerHTML = filteredTasks.map(t => {
                 const isDone = t.status === 'Completed';
-                const statusBadge = getStatusBadgeHTML(t.status);
-                const priorityBadge = getPriorityBadgeHTML(t.priority);
                 const logged = parseFloat(t.loggedHours) || 0;
                 const earned = logged * HOURLY_RATE;
 
                 return `
-                    <tr class="hover:bg-slate-800/40 transition border-b border-slate-700/40">
+                    <tr class="border-b border-slate-700/40 ${isDone ? 'bg-emerald-500/[0.03]' : ''}">
                         <td class="py-3 px-4 text-center">
-                            <input type="checkbox" ${isDone ? 'checked' : ''} disabled
-                                class="w-4 h-4 rounded bg-slate-900 border-slate-700 text-indigo-600 focus:ring-0 opacity-75 cursor-not-allowed">
+                            <i class="fa-solid ${isDone ? 'fa-circle-check text-emerald-400' : 'fa-circle text-slate-600'}"></i>
                         </td>
                         <td class="py-3 px-4">
                             <span class="font-medium text-slate-100 ${isDone ? 'line-through text-slate-400' : ''}">${escapeHtml(t.title)}</span>
                         </td>
-                        <td class="py-3 px-4">${statusBadge}</td>
-                        <td class="py-3 px-4">${priorityBadge}</td>
+                        <td class="py-3 px-4">${getStatusBadgeHTML(t.status)}</td>
+                        <td class="py-3 px-4">${getPriorityBadgeHTML(t.priority)}</td>
                         <td class="py-3 px-4 text-right">
                             <span class="font-semibold text-slate-200">${fmtHours(logged)}h</span>
                             <div class="text-[10px] text-emerald-400 mt-0.5 font-medium">${formatCurrency(earned)}</div>
@@ -414,14 +459,15 @@
 
         function getStatusBadgeHTML(status) {
             let styles = "bg-slate-700 text-slate-300 border-slate-600";
-            if (status === 'Completed') styles = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
-            if (status === 'In Progress') styles = "bg-blue-500/10 text-blue-400 border-blue-500/30";
-            if (status === 'Needs Revision') styles = "bg-amber-500/10 text-amber-400 border-amber-500/30";
-            if (status === 'Pending') styles = "bg-slate-700/50 text-slate-400 border-slate-600/50";
+            let dot = "bg-slate-400";
+            if (status === 'Completed') { styles = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"; dot = "bg-emerald-400"; }
+            if (status === 'In Progress') { styles = "bg-blue-500/10 text-blue-400 border-blue-500/30"; dot = "bg-blue-400"; }
+            if (status === 'Needs Revision') { styles = "bg-amber-500/10 text-amber-400 border-amber-500/30"; dot = "bg-amber-400"; }
+            if (status === 'Pending') { styles = "bg-slate-700/50 text-slate-400 border-slate-600/50"; dot = "bg-slate-400"; }
 
             return `
                 <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full border ${styles} inline-flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full ${status === 'Completed' ? 'bg-emerald-400' : status === 'Needs Revision' ? 'bg-amber-400' : status === 'In Progress' ? 'bg-blue-400' : 'bg-slate-400'}"></span>
+                    <span class="w-1.5 h-1.5 rounded-full ${dot}"></span>
                     ${status}
                 </span>
             `;
@@ -443,7 +489,7 @@
                 totalLogged += logged;
                 const earned = logged * HOURLY_RATE;
                 return `
-                    <tr class="hover:bg-slate-800/30">
+                    <tr>
                         <td class="py-2.5 px-3 font-medium text-slate-200">${escapeHtml(t.title)}</td>
                         <td class="py-2.5 px-3">
                             <span class="text-[10px] px-2 py-0.5 rounded ${t.status === 'Completed' ? 'bg-emerald-950 text-emerald-400' : 'bg-slate-800 text-slate-400'}">
@@ -548,12 +594,6 @@
                 hoursChartInstance.data.datasets[0].data = loggedData;
                 hoursChartInstance.update();
             }
-        }
-
-        function escapeHtml(str) {
-            return String(str)
-                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
         }
     </script>
 </body>
