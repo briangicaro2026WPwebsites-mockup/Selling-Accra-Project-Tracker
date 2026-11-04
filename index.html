@@ -3,687 +3,569 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website Completion Project Tracker (View Only)</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js for data visualization -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Inter Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        brand: {
-                            50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1',
-                            600: '#4f46e5', 700: '#4338ca', 900: '#312e81',
-                        }
-                    }
-                }
+    <title>Invoice - Selling Accra Real Estate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #e0e7ff;
+            --success: #059669;
+            --success-bg: #d1fae5;
+            --warning: #d97706;
+            --warning-bg: #fef3c7;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --bg-light: #f9fafb;
+        }
+
+        /* Keyframe Animations */
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes pulseWarning {
+            0% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(217, 119, 6, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0); }
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text-main);
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .invoice-container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            overflow: hidden;
+            opacity: 0;
+            animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Animated Top Accent Bar */
+        .accent-bar {
+            height: 6px;
+            background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 25%, #ec4899 50%, #7c3aed 75%, #4f46e5 100%);
+            background-size: 200% 200%;
+            animation: gradientMove 6s linear infinite;
+        }
+
+        .invoice-body {
+            padding: 40px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 30px;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: slideUpFade 0.6s 0.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .header-left h1 {
+            margin: 0 0 8px 0;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .header-left p {
+            margin: 4px 0;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .header-right {
+            text-align: right;
+        }
+
+        .header-right h2 {
+            margin: 0 0 12px 0;
+            font-size: 18px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .header-right p {
+            margin: 6px 0;
+            font-size: 14px;
+            color: var(--text-main);
+        }
+
+        .due-date-badge {
+            display: inline-block;
+            background-color: var(--warning-bg);
+            color: var(--warning);
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            margin-top: 4px;
+            border: 1px solid transparent;
+            animation: pulseWarning 2s infinite;
+        }
+
+        /* Billing Info */
+        .billing-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            gap: 40px;
+            opacity: 0;
+            animation: slideUpFade 0.6s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .billing-info div {
+            flex: 1;
+            padding: 15px;
+            background: var(--bg-light);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .billing-info div:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+            background: #ffffff;
+        }
+
+        .billing-info h3 {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin: 0 0 12px 0;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .billing-info p {
+            margin: 4px 0;
+            font-size: 14px;
+            color: var(--text-main);
+        }
+
+        .billing-info p.name {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--primary);
+        }
+
+        /* Table */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            opacity: 0;
+            animation: slideUpFade 0.6s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th {
+            background-color: var(--bg-light);
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: left;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            vertical-align: top;
+            transition: background-color 0.2s ease;
+        }
+
+        tbody tr {
+            transition: all 0.25s ease;
+            background-color: #ffffff;
+            position: relative;
+        }
+
+        tbody tr:hover {
+            background-color: var(--bg-light);
+            transform: scale(1.002);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            z-index: 1;
+        }
+
+        .task-desc {
+            font-weight: 500;
+            color: var(--text-main);
+            max-width: 320px;
+        }
+
+        .task-url {
+            display: inline-block;
+            font-size: 12px;
+            color: var(--primary);
+            margin-top: 6px;
+            text-decoration: none;
+            word-break: break-all;
+            transition: color 0.2s ease, text-decoration 0.2s ease;
+            background: rgba(79, 70, 229, 0.05);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .task-url:hover {
+            color: #4338ca;
+            text-decoration: underline;
+            background: rgba(79, 70, 229, 0.1);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: transform 0.2s ease;
+        }
+
+        .status-badge:hover {
+            transform: scale(1.05);
+        }
+
+        .status-completed {
+            background-color: var(--success-bg);
+            color: var(--success);
+            border: 1px solid transparent;
+        }
+
+        .status-pending {
+            background-color: #f3f4f6;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        /* Summary Card */
+        .summary-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+            opacity: 0;
+            animation: slideUpFade 0.6s 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .summary-card {
+            background-color: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            width: 320px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .summary-card:hover {
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .summary-row span:last-child {
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .summary-row.total {
+            border-top: 2px solid var(--border);
+            margin-top: 12px;
+            padding-top: 16px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .summary-row.total span:last-child {
+            color: var(--primary);
+            font-size: 24px;
+            text-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+        }
+
+        /* Notes & Footer */
+        .notes {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: var(--primary-light);
+            border-left: 4px solid var(--primary);
+            border-radius: 4px;
+            font-size: 13px;
+            color: var(--text-main);
+            line-height: 1.6;
+            opacity: 0;
+            animation: slideUpFade 0.6s 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .notes strong {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--primary);
+        }
+
+        /* Print Button */
+        .print-btn {
+            display: block;
+            width: 220px;
+            margin: 30px auto 0;
+            padding: 14px;
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+            opacity: 0;
+            animation: slideUpFade 0.6s 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .print-btn:hover {
+            background-color: #4338ca;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(79, 70, 229, 0.4);
+        }
+        
+        .print-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
+        }
+
+        /* Print Media Query */
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            * {
+                animation: none !important;
+                transition: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+                box-shadow: none !important;
+            }
+            .invoice-container {
+                border-radius: 0;
+                max-width: 100%;
+            }
+            .accent-bar {
+                display: none;
+            }
+            .billing-info div {
+                border: none;
+                background: transparent;
+                padding: 0;
+            }
+            .table-wrapper {
+                border: none;
+            }
+            .print-btn {
+                display: none;
+            }
+            .status-completed {
+                border: 1px solid var(--success);
+            }
+            .status-pending {
+                border: 1px solid var(--text-muted);
+            }
+            .task-url {
+                color: var(--text-main);
+                background: transparent;
+                padding: 0;
             }
         }
-    </script>
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #1e293b; }
-        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
-        .readonly-note { cursor: default; }
-        .wrap-anywhere { overflow-wrap: anywhere; word-break: break-word; }
     </style>
 </head>
-<body class="min-h-screen bg-slate-900 text-slate-100 flex flex-col">
+<body>
 
-    <!-- Header / Navbar -->
-    <header class="bg-slate-800/80 backdrop-blur border-b border-slate-700 sticky top-0 z-30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="p-2 bg-indigo-600 rounded-lg text-white shadow-lg shadow-indigo-500/30">
-                    <i class="fa-solid fa-list-check text-xl"></i>
+    <div class="invoice-container">
+        <div class="accent-bar"></div>
+        <div class="invoice-body">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <h1>INVOICE</h1>
+                    <p><strong>Project:</strong> Website Landing Page & Social Media Updates</p>
+                    <p><strong>Domain:</strong> sellingaccra.com</p>
+                </div>
+                <div class="header-right">
+                    <h2>#INV2026SELACRA-001</h2>
+                    <p><strong>Issue Date:</strong> Nov 4, 2026</p>
+                    <p><strong>Billing Period:</strong> Oct 26 - Nov 1, 2026</p>
+                    <div class="due-date-badge">Due Date: Nov 1, 2026</div>
+                </div>
+            </div>
+
+            <!-- Billing Info -->
+            <div class="billing-info">
+                <div>
+                    <h3>Billed To</h3>
+                    <p class="name">Beatrix Ayache</p>
+                    <p>Realtor Agent</p>
+                    <p>Owner of Selling Accra - sellingaccra.com</p>
                 </div>
                 <div>
-                    <h1 class="font-bold text-lg leading-tight text-white">Selling Accra - Real Estate | Website Project Tracker</h1>
-                    <p class="text-xs text-slate-400">
-                        Website Launch &amp; Social Rollout
-                        <span class="mx-1 text-slate-600">•</span>
-                        <span class="text-emerald-400 font-medium">$7.00/hr</span>
-                        <span class="mx-1 text-slate-600">•</span>
-                        <span class="text-indigo-300">Mon–Sun</span>
-                    </p>
+                    <h3>Billed From</h3>
+                    <p class="name">Brian Gicaro</p>
+                    <p>Website Developer</p>
+                    <p>Virtual Assistant/Freelancer</p>
                 </div>
             </div>
 
-            <div class="flex items-center space-x-2 sm:space-x-3">
-                <span class="inline-flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[11px] font-semibold px-2.5 py-1.5 rounded-lg" title="This tracker is in view-only mode">
-                    <i class="fa-solid fa-eye"></i>
-                    <span class="hidden sm:inline">View Only</span>
-                </span>
-
-                <button onclick="exportData()" class="flex items-center space-x-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-3.5 py-2 rounded-lg text-sm font-medium border border-slate-700 transition-all active:scale-95" title="Export all data as JSON backup">
-                    <i class="fa-solid fa-file-export text-emerald-400"></i>
-                    <span class="hidden md:inline">Export</span>
-                </button>
-
-                <button onclick="exportWeeklySummary()" class="flex items-center space-x-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-3.5 py-2 rounded-lg text-sm font-medium border border-slate-700 transition-all active:scale-95" title="Print / Export Report">
-                    <i class="fa-solid fa-print"></i>
-                    <span class="hidden md:inline">Print</span>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-
-        <!-- Top Metrics / KPI Dashboard -->
-        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between relative overflow-hidden group hover:border-slate-600 transition">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Tasks</span>
-                    <span class="p-2 bg-slate-700/50 rounded-lg text-slate-300"><i class="fa-solid fa-bars-staggered"></i></span>
-                </div>
-                <div class="mt-4 flex items-baseline">
-                    <span id="kpi-total" class="text-3xl font-extrabold text-white">0</span>
-                    <span class="ml-2 text-xs text-slate-400">items</span>
-                </div>
-                <div class="absolute bottom-0 left-0 right-0 h-1 bg-slate-600"></div>
-            </div>
-
-            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between relative overflow-hidden group hover:border-emerald-500/50 transition">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Completed</span>
-                    <span class="p-2 bg-emerald-500/10 rounded-lg text-emerald-400"><i class="fa-solid fa-circle-check"></i></span>
-                </div>
-                <div class="mt-4 flex items-baseline">
-                    <span id="kpi-completed" class="text-3xl font-extrabold text-emerald-400">0</span>
-                    <span id="kpi-completed-pct" class="ml-2 text-xs text-emerald-500 font-medium">0%</span>
-                </div>
-                <div class="absolute bottom-0 left-0 right-0 h-1 bg-emerald-500"></div>
-            </div>
-
-            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between relative overflow-hidden group hover:border-amber-500/50 transition">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-amber-400">Needs Revision</span>
-                    <span class="p-2 bg-amber-500/10 rounded-lg text-amber-400"><i class="fa-solid fa-triangle-exclamation"></i></span>
-                </div>
-                <div class="mt-4 flex items-baseline">
-                    <span id="kpi-revision" class="text-3xl font-extrabold text-amber-400">0</span>
-                    <span class="ml-2 text-xs text-amber-500 font-medium">Attention</span>
-                </div>
-                <div class="absolute bottom-0 left-0 right-0 h-1 bg-amber-500"></div>
-            </div>
-
-            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between relative overflow-hidden group hover:border-blue-500/50 transition">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-blue-400">Pending / In Progress</span>
-                    <span class="p-2 bg-blue-500/10 rounded-lg text-blue-400"><i class="fa-solid fa-clock"></i></span>
-                </div>
-                <div class="mt-4 flex items-baseline">
-                    <span id="kpi-pending" class="text-3xl font-extrabold text-blue-400">0</span>
-                    <span class="ml-2 text-xs text-slate-400">remaining</span>
-                </div>
-                <div class="absolute bottom-0 left-0 right-0 h-1 bg-blue-500"></div>
-            </div>
-
-            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between relative overflow-hidden group hover:border-emerald-500/50 transition">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Total Earnings</span>
-                    <span class="p-2 bg-emerald-500/10 rounded-lg text-emerald-400"><i class="fa-solid fa-dollar-sign"></i></span>
-                </div>
-                <div class="mt-4 flex items-baseline">
-                    <span id="kpi-earnings" class="text-3xl font-extrabold text-emerald-400">$0.00</span>
-                </div>
-                <div class="mt-1 text-[11px] text-slate-400">
-                    <span id="kpi-weekly-hours" class="text-slate-300 font-medium">0 hrs</span> × $7.00/hr
-                </div>
-                <div class="absolute bottom-0 left-0 right-0 h-1 bg-emerald-500"></div>
-            </div>
-
-            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-4 flex items-center justify-between relative overflow-hidden">
-                <div class="flex flex-col justify-center">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Overall Progress</span>
-                    <span id="overall-percentage-text" class="text-2xl font-extrabold text-white mt-1">0%</span>
-                    <span id="hours-logged-stat" class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-clock text-indigo-400 mr-1"></i>0 hrs logged</span>
-                </div>
-                <div class="relative w-20 h-20 flex-shrink-0">
-                    <canvas id="kpiGaugeChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <!-- Main Task Management Section -->
-        <section class="bg-slate-800/60 border border-slate-700/60 rounded-xl overflow-hidden shadow-xl">
-            <div class="p-5 border-b border-slate-700 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-list-check text-indigo-400"></i> Project Milestones &amp; Deliverables
-                    </h2>
-                    <p class="text-xs text-slate-400 mt-0.5">Read-only overview of project deliverables. Filter and search to review statuses and logged hours.</p>
-                </div>
-
-                <div class="flex flex-wrap items-center gap-3">
-                    <div class="relative flex-1 sm:w-48">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                        <input type="text" id="task-search" oninput="renderTasks()" placeholder="Search tasks..."
-                            class="w-full pl-8 pr-3 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition">
-                    </div>
-
-                    <select id="status-filter" onchange="renderTasks()" class="bg-slate-900 border border-slate-700 text-xs text-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:border-indigo-500 transition">
-                        <option value="ALL">All Statuses</option>
-                        <option value="Completed">Completed</option>
-                        <option value="In Progress">In Progress</option>
-                        <option value="Needs Revision">Needs Revision</option>
-                        <option value="Pending">Pending</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm">
-                    <thead class="bg-slate-900/50 text-slate-400 uppercase text-[11px] tracking-wider border-b border-slate-700/60">
+            <!-- Line Items -->
+            <div class="table-wrapper">
+                <table>
+                    <thead>
                         <tr>
-                            <th class="py-3.5 px-4 w-12 text-center">Done</th>
-                            <th class="py-3.5 px-4">Task Description</th>
-                            <th class="py-3.5 px-4 w-32">State</th>
-                            <th class="py-3.5 px-4 w-24">Priority</th>
-                            <th class="py-3.5 px-4 w-40 text-right">Hours (Logged / Target)</th>
+                            <th>Task Description</th>
+                            <th>Status</th>
+                            <th class="text-right">Hours</th>
+                            <th class="text-right">Rate</th>
+                            <th class="text-right">Amount</th>
                         </tr>
                     </thead>
-                    <tbody id="task-table-body" class="divide-y divide-slate-700/50 text-slate-300"></tbody>
+                    <tbody>
+                        <tr>
+                            <td class="task-desc">1. Finalize Landing Pages template (Site 1 sellingaccra.com / Site 2 https://sellingaccra.com/landing-page-2-selling-accra/)</td>
+                            <td><span class="status-badge status-completed">Completed</span></td>
+                            <td class="text-right">13h</td>
+                            <td class="text-right">$7.00</td>
+                            <td class="text-right">$91.00</td>
+                        </tr>
+                        <tr>
+                            <td class="task-desc">2. Finalize watermark logo for photos - logo should be transparent https://i.postimg.cc/4xKfz8NF/1.jpg</td>
+                            <td><span class="status-badge status-completed">Completed</span></td>
+                            <td class="text-right">1h</td>
+                            <td class="text-right">$7.00</td>
+                            <td class="text-right">$7.00</td>
+                        </tr>
+                        <tr>
+                            <td class="task-desc">
+                                3. Update Enquiry form - New Form and Logo
+                                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdaWE0f7DwZKoiGVRWT-OdP8rVvMHcOvnYYUY4u5bpDsuvyEQ/viewform" target="_blank" class="task-url">https://docs.google.com/forms/d/e/1FAIpQLSdaWE0f7DwZKoiGVRWT-OdP8rVvMHcOvnYYUY4u5bpDsuvyEQ/viewform</a>
+                            </td>
+                            <td><span class="status-badge status-completed">Completed</span></td>
+                            <td class="text-right">3h</td>
+                            <td class="text-right">$7.00</td>
+                            <td class="text-right">$21.00</td>
+                        </tr>
+                        <tr>
+                            <td class="task-desc">4. Create new IG account</td>
+                            <td><span class="status-badge status-pending">Pending</span></td>
+                            <td class="text-right">0h</td>
+                            <td class="text-right">$7.00</td>
+                            <td class="text-right">$0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="task-desc">5. Update LinkedIn profile</td>
+                            <td><span class="status-badge status-pending">Pending</span></td>
+                            <td class="text-right">0h</td>
+                            <td class="text-right">$7.00</td>
+                            <td class="text-right">$0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="task-desc">6. Update Facebook Page (Profile & Cover Image) https://www.facebook.com/sellingaccra</td>
+                            <td><span class="status-badge status-completed">Completed</span></td>
+                            <td class="text-right">2h</td>
+                            <td class="text-right">$7.00</td>
+                            <td class="text-right">$14.00</td>
+                        </tr>
+                        <tr>
+                            <td class="task-desc">7. Post, post, post</td>
+                            <td><span class="status-badge status-pending">Pending</span></td>
+                            <td class="text-right">0h</td>
+                            <td class="text-right">$7.00</td>
+                            <td class="text-right">$0.00</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
 
-            <div class="p-4 bg-slate-900/30 border-t border-slate-700/60 text-xs text-slate-400 flex flex-col sm:flex-row gap-2 justify-between sm:items-center">
-                <span id="showing-tasks-count">Showing 0 tasks</span>
-                <span class="text-slate-500"><i class="fa-solid fa-lock mr-1 text-amber-400"></i>View-only mode — data cannot be modified here.</span>
-            </div>
-        </section>
-
-        <!-- Time & Progress Report Section -->
-        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 space-y-6">
-
-                <!-- Report & Breakdown -->
-                <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-6 shadow-xl">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-700">
-                        <div>
-                            <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                                <i class="fa-solid fa-chart-column text-indigo-400"></i> Progress &amp; Time Summary
-                            </h2>
-                            <p class="text-xs text-slate-400 mt-1">Detailed breakdown of accomplished deliverables and total effort spent.</p>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <span class="text-xs bg-slate-700/40 text-slate-300 border border-slate-600/60 px-3 py-1.5 rounded-lg flex items-center gap-1.5">
-                                <i class="fa-solid fa-eye text-amber-400"></i> Read-only
-                            </span>
-                        </div>
+            <!-- Totals Summary -->
+            <div class="summary-wrapper">
+                <div class="summary-card">
+                    <div class="summary-row">
+                        <span>Subtotal (Completed Tasks):</span>
+                        <span>$133.00</span>
                     </div>
-
-                    <div class="mt-6">
-                        <div class="h-64 w-full">
-                            <canvas id="hoursChart"></canvas>
-                        </div>
+                    <div class="summary-row">
+                        <span>Total Hours Logged:</span>
+                        <span>19 hrs</span>
                     </div>
-
-                    <div class="mt-8">
-                        <h3 class="text-sm font-semibold text-slate-200 mb-3 flex items-center gap-2">
-                            <i class="fa-solid fa-list-check text-emerald-400"></i> Accomplished &amp; In-Progress Summary
-                        </h3>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-xs text-left">
-                                <thead class="bg-slate-900/60 text-slate-400 uppercase border-b border-slate-700">
-                                    <tr>
-                                        <th class="py-2.5 px-3">Task Name</th>
-                                        <th class="py-2.5 px-3">Status</th>
-                                        <th class="py-2.5 px-3 text-right">Logged</th>
-                                        <th class="py-2.5 px-3 text-right">Target</th>
-                                        <th class="py-2.5 px-3 text-right">Rate</th>
-                                        <th class="py-2.5 px-3 text-right">Earnings</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="weekly-breakdown-body" class="divide-y divide-slate-700/40 text-slate-300"></tbody>
-                                <tfoot class="bg-slate-900/80 font-semibold text-white border-t border-slate-700">
-                                    <tr>
-                                        <td class="py-2.5 px-3" colspan="2">Total Summary</td>
-                                        <td id="total-logged-hours" class="py-2.5 px-3 text-right text-indigo-400 font-bold">0h</td>
-                                        <td id="total-target-hours" class="py-2.5 px-3 text-right text-slate-300 font-bold">0h</td>
-                                        <td class="py-2.5 px-3 text-right text-slate-400">$7.00</td>
-                                        <td id="total-task-earnings" class="py-2.5 px-3 text-right text-emerald-400 font-bold">$0.00</td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
+                    <div class="summary-row">
+                        <span>Hourly Rate:</span>
+                        <span>$7.00 / hr</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total Due:</span>
+                        <span>$133.00</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Col: Executive Summary / Notes Widget -->
-            <div class="space-y-6">
-                <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-6 shadow-xl flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-base font-bold text-white mb-1 flex items-center gap-2">
-                            <i class="fa-solid fa-file-invoice text-indigo-400"></i> Executive Progress Highlights
-                        </h3>
-                        <p class="text-xs text-slate-400 mb-4">Auto-generated summary ready for stakeholders.</p>
-
-                        <div class="bg-slate-900/80 border border-slate-700/80 rounded-lg p-4 space-y-3 text-xs text-slate-300">
-                            <div>
-                                <span class="text-slate-400 font-semibold block uppercase text-[10px] tracking-wider mb-1">Key Milestone Status</span>
-                                <p id="report-milestone-text" class="text-slate-200">Loading progress data...</p>
-                            </div>
-                            <div class="pt-2 border-t border-slate-800">
-                                <span class="text-slate-400 font-semibold block uppercase text-[10px] tracking-wider mb-1">Time Logged</span>
-                                <p id="report-time-text" class="text-slate-200">Calculating hours...</p>
-                            </div>
-                            <div class="pt-2 border-t border-slate-800">
-                                <span class="text-slate-400 font-semibold block uppercase text-[10px] tracking-wider mb-1">Earnings ($7.00/hr)</span>
-                                <p id="report-earnings-text" class="text-slate-200">Calculating earnings...</p>
-                            </div>
-                            <div class="pt-2 border-t border-slate-800">
-                                <span class="text-slate-400 font-semibold block uppercase text-[10px] tracking-wider mb-1">Action Needed</span>
-                                <p id="report-action-text" class="text-amber-300">Checking revision tasks...</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-6">
-                        <label class="block text-xs font-semibold text-slate-300 mb-2">Weekly Notes &amp; Observations</label>
-                        <textarea id="weekly-notes" rows="4" readonly placeholder="No notes recorded."
-                            class="readonly-note w-full bg-slate-900/60 border border-slate-700 rounded-lg p-3 text-xs text-slate-300 placeholder-slate-500 focus:outline-none resize-none"></textarea>
-                        <p class="text-[10px] text-slate-500 mt-1"><i class="fa-solid fa-lock mr-1"></i>Read-only — notes cannot be edited in this view.</p>
-                    </div>
-
-                    <button onclick="exportWeeklySummary()" class="mt-4 w-full bg-slate-700 hover:bg-slate-600 text-slate-100 py-2 rounded-lg text-xs font-semibold transition border border-slate-600 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download"></i> Print / Export Full Summary
-                    </button>
-                </div>
+            <!-- Notes -->
+            <div class="notes">
+                <strong>Project Notes:</strong>
+                Overall website launch preparation is 57% complete (4 of 7 tasks). No items are currently flagged for revision. Pending items (IG Account, LinkedIn, Social Posting) will be billed upon completion in the next cycle.
             </div>
-        </section>
-    </main>
-
-    <!-- Notification Toast Box -->
-    <div id="toast" class="fixed bottom-5 right-5 bg-slate-800 border border-indigo-500 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
-        <i id="toast-icon" class="fa-solid fa-circle-check text-indigo-400"></i>
-        <span id="toast-message" class="text-xs font-medium">Done</span>
+        </div>
     </div>
 
-    <footer class="mt-auto border-t border-slate-800 py-4 text-center text-xs text-slate-500">
-        <p>Website Completion Project Tracker &bull; $7.00/hr &bull; Mon–Sun &bull; <span class="text-amber-400/90">View-only mode</span> &bull; Data snapshot exported 30 Oct 2026.</p>
-    </footer>
+    <!-- Print Button -->
+    <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
 
-    <script>
-        // ============================================================
-        // CONFIGURATION — data baked in from the exported tracker DB
-        // ============================================================
-        const HOURLY_RATE = 7.00;
-        const DATA_SNAPSHOT_AT = '2026-10-30T15:52:08.227Z';
-
-        const DATASET = {
-            app: 'website-project-tracker',
-            version: 3,
-            hourlyRate: 7,
-            notes: '',
-            tasks: [
-                { id: '1', title: '1. Finalize Landing Pages template (Site 1 and Site 2)', status: 'Completed', priority: 'High', targetHours: 8, loggedHours: 13 },
-                { id: '2', title: '2. Finalize watermark logo for photos -  logo should be transparent', status: 'Completed', priority: 'Medium', targetHours: 8, loggedHours: 1 },
-                { id: '3', title: '3. Update Enquiry form - New Form and Logo https://docs.google.com/forms/d/1X0qC62hP31iqInB619bq41UdoSUle7sxT-TpG73P2LI/edit', status: 'Completed', priority: 'Medium', targetHours: 8, loggedHours: 3 },
-                { id: '4', title: '4. Create new IG account', status: 'Pending', priority: 'Low', targetHours: 8, loggedHours: 0 },
-                { id: '5', title: '5. Update LinkedIN profile', status: 'Pending', priority: 'Low', targetHours: 8, loggedHours: 0 },
-                { id: '6', title: '6. Update Facebook Page (Profile & Cover Image)', status: 'Completed', priority: 'Medium', targetHours: 2, loggedHours: 2 },
-                { id: '7', title: '7. Post, post, post', status: 'Pending', priority: 'Low', targetHours: 8, loggedHours: 0 }
-            ]
-        };
-
-        let tasks = [];
-        let gaugeChartInstance = null;
-        let hoursChartInstance = null;
-
-        // ============================================================
-        // HELPERS
-        // ============================================================
-        function formatCurrency(n) { return '$' + (parseFloat(n) || 0).toFixed(2); }
-        function fmtHours(n) { return String(parseFloat((parseFloat(n) || 0).toFixed(2))); }
-
-        function getTaskTotalHours() {
-            return tasks.reduce((s, t) => s + (parseFloat(t.loggedHours) || 0), 0);
-        }
-        function getTargetTotalHours() {
-            return tasks.reduce((s, t) => s + (parseFloat(t.targetHours) || 0), 0);
-        }
-
-        // Initialize Application
-        window.addEventListener('DOMContentLoaded', () => {
-            loadInitialData();
-            initCharts();
-            renderAll();
-        });
-
-        // ============================================================
-        // LOAD (READ-ONLY — nothing is written back to storage)
-        // ============================================================
-        function loadInitialData() {
-            // Reset: always start from the embedded snapshot, normalized & safe.
-            const validStatuses = ['Pending', 'In Progress', 'Needs Revision', 'Completed'];
-            const validPriorities = ['Low', 'Medium', 'High'];
-
-            tasks = DATASET.tasks.map((t, i) => ({
-                id: String(t.id != null ? t.id : i + 1),
-                title: String(t.title || 'Untitled task'),
-                status: validStatuses.includes(t.status) ? t.status : 'Pending',
-                priority: validPriorities.includes(t.priority) ? t.priority : 'Medium',
-                targetHours: Math.max(0, parseFloat(t.targetHours) || 0),
-                loggedHours: Math.max(0, parseFloat(t.loggedHours) || 0)
-            }));
-
-            document.getElementById('weekly-notes').value = DATASET.notes || '';
-        }
-
-        // ============================================================
-        // RENDER
-        // ============================================================
-        function renderAll() {
-            renderKPIs();
-            renderTasks();
-            renderWeeklyBreakdown();
-            updateTimesheetSummary();
-            renderExecutiveReport();
-            updateCharts();
-        }
-
-        function renderKPIs() {
-            const total = tasks.length;
-            const completed = tasks.filter(t => t.status === 'Completed').length;
-            const revision = tasks.filter(t => t.status === 'Needs Revision').length;
-            const pending = tasks.filter(t => t.status === 'Pending' || t.status === 'In Progress').length;
-            const overallPct = total > 0 ? Math.round((completed / total) * 100) : 0;
-
-            document.getElementById('kpi-total').textContent = total;
-            document.getElementById('kpi-completed').textContent = completed;
-            document.getElementById('kpi-completed-pct').textContent = `${overallPct}% completed`;
-            document.getElementById('kpi-revision').textContent = revision;
-            document.getElementById('kpi-pending').textContent = pending;
-            document.getElementById('overall-percentage-text').textContent = `${overallPct}%`;
-        }
-
-        function renderTasks() {
-            const tbody = document.getElementById('task-table-body');
-            const searchVal = document.getElementById('task-search').value.toLowerCase();
-            const statusVal = document.getElementById('status-filter').value;
-
-            const filteredTasks = tasks.filter(t => {
-                const matchesSearch = t.title.toLowerCase().includes(searchVal);
-                const matchesStatus = statusVal === 'ALL' || t.status === statusVal;
-                return matchesSearch && matchesStatus;
-            });
-
-            document.getElementById('showing-tasks-count').textContent = `Showing ${filteredTasks.length} of ${tasks.length} tasks`;
-
-            if (filteredTasks.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-500 text-xs">No tasks found matching current filters.</td></tr>`;
-                return;
-            }
-
-            tbody.innerHTML = filteredTasks.map(t => {
-                const isDone = t.status === 'Completed';
-                const statusBadge = getStatusBadgeHTML(t.status);
-                const priorityBadge = getPriorityBadgeHTML(t.priority);
-                const logged = parseFloat(t.loggedHours) || 0;
-                const target = parseFloat(t.targetHours) || 0;
-                const earned = logged * HOURLY_RATE;
-                const overTarget = target > 0 && logged > target;
-                const pct = target > 0 ? Math.min(100, Math.round((logged / target) * 100)) : 0;
-
-                return `
-                    <tr class="hover:bg-slate-800/40 transition border-b border-slate-700/40">
-                        <td class="py-3 px-4 text-center">
-                            <i class="fa-solid ${isDone ? 'fa-circle-check text-emerald-400' : 'fa-circle text-slate-600'}"></i>
-                        </td>
-                        <td class="py-3 px-4 max-w-md">
-                            <span class="wrap-anywhere font-medium text-slate-100 ${isDone ? 'line-through decoration-slate-500 text-slate-400' : ''}">${escapeHtml(t.title)}</span>
-                        </td>
-                        <td class="py-3 px-4">${statusBadge}</td>
-                        <td class="py-3 px-4">${priorityBadge}</td>
-                        <td class="py-3 px-4">
-                            <div class="text-right">
-                                <span class="font-semibold text-slate-200">${fmtHours(logged)}h</span>
-                                <span class="text-slate-500">/ ${fmtHours(target)}h</span>
-                                <div class="mt-1.5 h-1 w-24 bg-slate-700/80 rounded-full overflow-hidden ml-auto">
-                                    <div class="h-full ${overTarget ? 'bg-amber-500' : 'bg-indigo-500'}" style="width:${pct}%"></div>
-                                </div>
-                                <div class="text-[10px] mt-1 font-medium ${overTarget ? 'text-amber-400' : 'text-emerald-400'}">
-                                    ${formatCurrency(earned)}${overTarget ? ' • over target' : ''}
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-        }
-
-        function getStatusBadgeHTML(status) {
-            let styles = "bg-slate-700 text-slate-300 border-slate-600";
-            if (status === 'Completed') styles = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
-            if (status === 'In Progress') styles = "bg-blue-500/10 text-blue-400 border-blue-500/30";
-            if (status === 'Needs Revision') styles = "bg-amber-500/10 text-amber-400 border-amber-500/30";
-            if (status === 'Pending') styles = "bg-slate-700/50 text-slate-400 border-slate-600/50";
-
-            return `
-                <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full border ${styles} inline-flex items-center gap-1.5 whitespace-nowrap">
-                    <span class="w-1.5 h-1.5 rounded-full ${status === 'Completed' ? 'bg-emerald-400' : status === 'Needs Revision' ? 'bg-amber-400' : status === 'In Progress' ? 'bg-blue-400' : 'bg-slate-400'}"></span>
-                    ${status}
-                </span>
-            `;
-        }
-
-        function getPriorityBadgeHTML(priority) {
-            let color = "text-slate-400";
-            if (priority === 'High') color = "text-rose-400 font-semibold";
-            if (priority === 'Medium') color = "text-amber-400";
-            return `<span class="text-xs ${color}">${priority || 'Medium'}</span>`;
-        }
-
-        function renderWeeklyBreakdown() {
-            const tbody = document.getElementById('weekly-breakdown-body');
-            let totalLogged = 0;
-            let totalTarget = 0;
-
-            tbody.innerHTML = tasks.map(t => {
-                const logged = parseFloat(t.loggedHours) || 0;
-                const target = parseFloat(t.targetHours) || 0;
-                totalLogged += logged;
-                totalTarget += target;
-                const earned = logged * HOURLY_RATE;
-                return `
-                    <tr class="hover:bg-slate-800/30">
-                        <td class="py-2.5 px-3 font-medium text-slate-200 wrap-anywhere">${escapeHtml(t.title)}</td>
-                        <td class="py-2.5 px-3">
-                            <span class="text-[10px] px-2 py-0.5 rounded whitespace-nowrap ${t.status === 'Completed' ? 'bg-emerald-950 text-emerald-400' : 'bg-slate-800 text-slate-400'}">
-                                ${t.status}
-                            </span>
-                        </td>
-                        <td class="py-2.5 px-3 text-right font-semibold text-indigo-400">${fmtHours(logged)}h</td>
-                        <td class="py-2.5 px-3 text-right text-slate-400">${fmtHours(target)}h</td>
-                        <td class="py-2.5 px-3 text-right text-slate-400">${formatCurrency(HOURLY_RATE)}</td>
-                        <td class="py-2.5 px-3 text-right text-emerald-400 font-semibold">${formatCurrency(earned)}</td>
-                    </tr>
-                `;
-            }).join('');
-
-            document.getElementById('total-logged-hours').textContent = `${fmtHours(totalLogged)}h`;
-            document.getElementById('total-target-hours').textContent = `${fmtHours(totalTarget)}h`;
-            document.getElementById('total-task-earnings').textContent = formatCurrency(totalLogged * HOURLY_RATE);
-        }
-
-        function updateTimesheetSummary() {
-            const total = getTaskTotalHours();
-            const target = getTargetTotalHours();
-            const earnings = total * HOURLY_RATE;
-            const el = id => document.getElementById(id);
-
-            if (el('kpi-earnings')) el('kpi-earnings').textContent = formatCurrency(earnings);
-            if (el('kpi-weekly-hours')) el('kpi-weekly-hours').textContent = `${fmtHours(total)} hrs`;
-            if (el('hours-logged-stat')) {
-                el('hours-logged-stat').innerHTML =
-                    `<i class="fa-solid fa-clock text-indigo-400 mr-1"></i>${fmtHours(total)} of ${fmtHours(target)} target hrs`;
-            }
-            if (el('report-earnings-text')) {
-                el('report-earnings-text').innerHTML =
-                    `<span class="text-emerald-300 font-semibold">${formatCurrency(earnings)}</span> ` +
-                    `(${fmtHours(total)} hrs × ${formatCurrency(HOURLY_RATE)}/hr).`;
-            }
-        }
-
-        // ============================================================
-        // EXECUTIVE REPORT
-        // ============================================================
-        function renderExecutiveReport() {
-            const total = tasks.length;
-            const completed = tasks.filter(t => t.status === 'Completed').length;
-            const revision = tasks.filter(t => t.status === 'Needs Revision');
-            const pendingTasks = tasks.filter(t => t.status === 'Pending' || t.status === 'In Progress');
-            const totalLogged = getTaskTotalHours();
-            const totalTarget = getTargetTotalHours();
-            const overTargetCount = tasks.filter(t => (parseFloat(t.loggedHours) || 0) > (parseFloat(t.targetHours) || 0)).length;
-
-            document.getElementById('report-milestone-text').textContent =
-                `${completed} of ${total} project tasks completed. Overall website launch preparation is ${total > 0 ? Math.round((completed / total) * 100) : 0}% complete.`;
-
-            document.getElementById('report-time-text').textContent =
-                `${fmtHours(totalLogged)} hrs logged against a ${fmtHours(totalTarget)} hr target ` +
-                `(${totalTarget > 0 ? Math.round((totalLogged / totalTarget) * 100) : 0}% of plan).`;
-
-            if (revision.length > 0) {
-                document.getElementById('report-action-text').innerHTML =
-                    `<i class="fa-solid fa-triangle-exclamation mr-1"></i> ${revision.length} task(s) require revisions: <b>${revision.map(r => escapeHtml(r.title)).join(', ')}</b>.`;
-            } else if (pendingTasks.length > 0) {
-                document.getElementById('report-action-text').innerHTML =
-                    `<i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i> No revisions flagged. ` +
-                    `${pendingTasks.length} task(s) still open — next up: <b>${escapeHtml(pendingTasks[0].title)}</b>.`;
-            } else {
-                document.getElementById('report-action-text').innerHTML =
-                    `<i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i> All tasks complete. No items flagged for revision.`;
-            }
-
-            const milestones = document.getElementById('report-milestone-text');
-            if (overTargetCount > 0) {
-                milestones.textContent += ` ${overTargetCount} task(s) exceeded their target hours.`;
-            }
-        }
-
-        // ============================================================
-        // CHARTS
-        // ============================================================
-        function initCharts() {
-            const gaugeCtx = document.getElementById('kpiGaugeChart').getContext('2d');
-            gaugeChartInstance = new Chart(gaugeCtx, {
-                type: 'doughnut',
-                data: { datasets: [{ data: [0, 100], backgroundColor: ['#6366f1', '#334155'], borderWidth: 0 }] },
-                options: { cutout: '80%', responsive: true, maintainAspectRatio: false, plugins: { tooltip: { enabled: false } } }
-            });
-
-            const hoursCtx = document.getElementById('hoursChart').getContext('2d');
-            hoursChartInstance = new Chart(hoursCtx, {
-                type: 'bar',
-                data: {
-                    labels: [],
-                    datasets: [
-                        { label: 'Logged Hours', data: [], backgroundColor: '#6366f1', borderRadius: 6 },
-                        { label: 'Target Hours', data: [], backgroundColor: '#334155', borderRadius: 6 }
-                    ]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    scales: {
-                        x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } },
-                        y: { beginAtZero: true, ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#334155' } }
-                    },
-                    plugins: {
-                        legend: { labels: { color: '#cbd5e1', font: { size: 11 }, boxWidth: 12 } },
-                        tooltip: {
-                            callbacks: {
-                                label: (ctx) => `${ctx.dataset.label}: ${fmtHours(ctx.parsed.y)}h`
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function updateCharts() {
-            const completed = tasks.filter(t => t.status === 'Completed').length;
-            const total = tasks.length || 1;
-            const pct = Math.round((completed / total) * 100);
-
-            if (gaugeChartInstance) {
-                gaugeChartInstance.data.datasets[0].data = [pct, 100 - pct];
-                gaugeChartInstance.update();
-            }
-            if (hoursChartInstance) {
-                const labels = tasks.map((t, i) => `#${i + 1}`);
-
-                hoursChartInstance.data.labels = labels;
-                hoursChartInstance.data.datasets[0].data = tasks.map(t => parseFloat(t.loggedHours) || 0);
-                hoursChartInstance.data.datasets[1].data = tasks.map(t => parseFloat(t.targetHours) || 0);
-                hoursChartInstance.options.plugins.tooltip.callbacks.title = (items) => {
-                    const idx = items[0].dataIndex;
-                    return tasks[idx] ? tasks[idx].title : items[0].label;
-                };
-                hoursChartInstance.update();
-            }
-        }
-
-        // ============================================================
-        // REPORT / EXPORT (READ-ONLY ACTIONS)
-        // ============================================================
-        function exportWeeklySummary() { window.print(); }
-
-        function exportData() {
-            const payload = {
-                app: 'website-project-tracker',
-                version: 3,
-                mode: 'view-only',
-                hourlyRate: HOURLY_RATE,
-                sourceSnapshotAt: DATA_SNAPSHOT_AT,
-                exportedAt: new Date().toISOString(),
-                tasks: tasks,
-                notes: document.getElementById('weekly-notes').value
-            };
-            const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            const stamp = new Date().toISOString().slice(0, 10);
-            a.href = url;
-            a.download = `project-tracker-backup-${stamp}.json`;
-            document.body.appendChild(a); a.click(); document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            showToast(`Exported ${tasks.length} task(s).`);
-        }
-
-        // ============================================================
-        // TOAST + UTIL
-        // ============================================================
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-message').textContent = msg;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            toast.classList.add('translate-y-0', 'opacity-100');
-            setTimeout(() => {
-                toast.classList.remove('translate-y-0', 'opacity-100');
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
-        }
-
-        function escapeHtml(str) {
-            return String(str)
-                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-        }
-    </script>
 </body>
 </html>
