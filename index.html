@@ -19,6 +19,8 @@
             --text-muted: #6b7280;
             --border: #e5e7eb;
             --bg-light: #f9fafb;
+            --wise-green: #9fe870;
+            --wise-dark: #163300;
         }
 
         /* Keyframe Animations */
@@ -333,9 +335,56 @@
             text-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
         }
 
+        /* Payment Section (Wise Integration) */
+        .payment-section {
+            margin-top: 30px;
+            padding: 24px;
+            background-color: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            opacity: 0;
+            animation: slideUpFade 0.6s 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        
+        .payment-info h4 {
+            margin: 0 0 6px 0;
+            font-size: 16px;
+            color: var(--text-main);
+        }
+        
+        .payment-info p {
+            margin: 0;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .wise-btn {
+            display: inline-block;
+            background-color: var(--wise-green);
+            color: var(--wise-dark);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(159, 232, 112, 0.4);
+        }
+
+        .wise-btn:hover {
+            background-color: #8be05d;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px -1px rgba(159, 232, 112, 0.6);
+        }
+
         /* Notes & Footer */
         .notes {
-            margin-top: 40px;
+            margin-top: 30px;
             padding: 20px;
             background-color: var(--primary-light);
             border-left: 4px solid var(--primary);
@@ -344,7 +393,7 @@
             color: var(--text-main);
             line-height: 1.6;
             opacity: 0;
-            animation: slideUpFade 0.6s 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: slideUpFade 0.6s 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .notes strong {
@@ -370,7 +419,7 @@
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
             opacity: 0;
-            animation: slideUpFade 0.6s 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: slideUpFade 0.6s 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .print-btn:hover {
@@ -425,6 +474,13 @@
                 color: var(--text-main);
                 background: transparent;
                 padding: 0;
+            }
+            .payment-section {
+                border: 1px solid var(--border);
+                background-color: transparent;
+            }
+            .wise-btn {
+                border: 1px solid var(--wise-dark);
             }
         }
     </style>
@@ -554,6 +610,17 @@
                         <span>$133.00</span>
                     </div>
                 </div>
+            </div>
+
+            <!-- Wise Payment Integration -->
+            <div class="payment-section">
+                <div class="payment-info">
+                    <h4>Make a Payment</h4>
+                    <p>Pay securely and instantly using Wise (formerly TransferWise).</p>
+                </div>
+                <a href="https://wise.com/pay/me/briandalisayg1" target="_blank" class="wise-btn">
+                    Pay $133.00 via Wise
+                </a>
             </div>
 
             <!-- Notes -->
