@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice - Selling Accra Real Estate</title>
+    <title>Invoice #INV2026SELACRA-001 — PAID</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -35,10 +35,10 @@
             100% { background-position: 0% 50%; }
         }
 
-        @keyframes pulseWarning {
-            0% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.4); }
-            70% { box-shadow: 0 0 0 6px rgba(217, 119, 6, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0); }
+        @keyframes pulsePaid {
+            0% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.4); }
+            70% { box-shadow: 0 0 0 8px rgba(5, 150, 105, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0); }
         }
 
         body {
@@ -50,9 +50,12 @@
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
 
         .invoice-container {
+            position: relative;
             max-width: 850px;
             margin: 0 auto;
             background: #ffffff;
@@ -71,7 +74,28 @@
             animation: gradientMove 6s linear infinite;
         }
 
+        /* PAID Watermark */
+        .paid-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 130px;
+            font-weight: 800;
+            letter-spacing: 14px;
+            color: rgba(5, 150, 105, 0.07);
+            border: 10px solid rgba(5, 150, 105, 0.07);
+            padding: 6px 40px 6px 54px;
+            border-radius: 20px;
+            white-space: nowrap;
+            pointer-events: none;
+            user-select: none;
+            z-index: 0;
+        }
+
         .invoice-body {
+            position: relative;
+            z-index: 1;
             padding: 40px;
         }
 
@@ -120,17 +144,60 @@
             color: var(--text-main);
         }
 
-        .due-date-badge {
+        /* PAID Badge (replaces due-date badge) */
+        .paid-badge {
             display: inline-block;
-            background-color: var(--warning-bg);
-            color: var(--warning);
-            padding: 5px 12px;
+            background-color: var(--success);
+            color: #ffffff;
+            padding: 6px 14px;
             border-radius: 6px;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 13px;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
             margin-top: 4px;
-            border: 1px solid transparent;
-            animation: pulseWarning 2s infinite;
+            border: 1px solid var(--success);
+            animation: pulsePaid 2.4s infinite;
+        }
+
+        /* PAID Banner */
+        .paid-banner {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--success-bg);
+            border: 1px solid var(--success);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: slideUpFade 0.6s 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .paid-banner .icon {
+            flex: 0 0 34px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--success);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .paid-banner .text strong {
+            display: block;
+            font-size: 15px;
+            color: var(--success);
+            letter-spacing: 0.3px;
+        }
+
+        .paid-banner .text span {
+            font-size: 13px;
+            color: var(--text-muted);
         }
 
         /* Billing Info */
@@ -324,23 +391,42 @@
             border-top: 2px solid var(--border);
             margin-top: 12px;
             padding-top: 16px;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             color: var(--text-main);
         }
 
         .summary-row.total span:last-child {
-            color: var(--primary);
-            font-size: 24px;
-            text-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+            color: var(--text-main);
+            font-size: 20px;
         }
 
-        /* Payment Section (Wise Integration) */
+        .summary-row.paid-row span:last-child {
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .summary-row.balance {
+            border-top: 2px solid var(--border);
+            margin-top: 12px;
+            padding-top: 16px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .summary-row.balance span:last-child {
+            color: var(--success);
+            font-size: 22px;
+            text-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
+        }
+
+        /* Payment Section (Paid) */
         .payment-section {
             margin-top: 30px;
             padding: 24px;
-            background-color: var(--bg-light);
-            border: 1px solid var(--border);
+            background-color: var(--success-bg);
+            border: 1px solid var(--success);
             border-radius: 8px;
             display: flex;
             align-items: center;
@@ -349,37 +435,37 @@
             opacity: 0;
             animation: slideUpFade 0.6s 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        
+
         .payment-info h4 {
             margin: 0 0 6px 0;
             font-size: 16px;
-            color: var(--text-main);
+            color: var(--success);
         }
-        
+
         .payment-info p {
             margin: 0;
             font-size: 13px;
             color: var(--text-muted);
         }
 
-        .wise-btn {
-            display: inline-block;
-            background-color: var(--wise-green);
-            color: var(--wise-dark);
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 15px;
-            text-decoration: none;
-            white-space: nowrap;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px -1px rgba(159, 232, 112, 0.4);
+        .payment-info p.payment-ref {
+            margin-top: 6px;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-variant-numeric: tabular-nums;
         }
 
-        .wise-btn:hover {
-            background-color: #8be05d;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px -1px rgba(159, 232, 112, 0.6);
+        .paid-chip {
+            display: inline-block;
+            background-color: var(--success);
+            color: #ffffff;
+            padding: 12px 22px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 15px;
+            letter-spacing: 0.4px;
+            white-space: nowrap;
+            box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.35);
         }
 
         /* Notes & Footer */
@@ -427,7 +513,7 @@
             transform: translateY(-3px);
             box-shadow: 0 8px 15px rgba(79, 70, 229, 0.4);
         }
-        
+
         .print-btn:active {
             transform: translateY(-1px);
             box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
@@ -453,6 +539,9 @@
             .accent-bar {
                 display: none;
             }
+            .paid-watermark {
+                transform: translate(-50%, -50%) rotate(-30deg) !important;
+            }
             .billing-info div {
                 border: none;
                 background: transparent;
@@ -476,11 +565,13 @@
                 padding: 0;
             }
             .payment-section {
-                border: 1px solid var(--border);
-                background-color: transparent;
+                border: 1px solid var(--success);
             }
-            .wise-btn {
-                border: 1px solid var(--wise-dark);
+            .paid-badge,
+            .paid-chip,
+            .paid-banner .icon {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
         }
     </style>
@@ -489,19 +580,29 @@
 
     <div class="invoice-container">
         <div class="accent-bar"></div>
+        <div class="paid-watermark" aria-hidden="true">PAID</div>
         <div class="invoice-body">
             <!-- Header -->
             <div class="header">
                 <div class="header-left">
                     <h1>INVOICE</h1>
-                    <p><strong>Project:</strong> Website Landing Page & Social Media Updates</p>
+                    <p><strong>Project:</strong> Website Landing Page &amp; Social Media Updates</p>
                     <p><strong>Domain:</strong> sellingaccra.com</p>
                 </div>
                 <div class="header-right">
                     <h2>#INV2026SELACRA-001</h2>
                     <p><strong>Issue Date:</strong> Nov 4, 2026</p>
                     <p><strong>Billing Period:</strong> Oct 26 - Nov 1, 2026</p>
-                    <div class="due-date-badge">Due Date: Nov 1, 2026</div>
+                    <div class="paid-badge">✓ Paid — Nov 5, 2026</div>
+                </div>
+            </div>
+
+            <!-- Paid Banner -->
+            <div class="paid-banner">
+                <div class="icon">✓</div>
+                <div class="text">
+                    <strong>PAID IN FULL — $133.00</strong>
+                    <span>Payment received on Nov 5, 2026 via Wise. No balance remaining. Pending items will be billed next cycle.</span>
                 </div>
             </div>
 
@@ -573,7 +674,7 @@
                             <td class="text-right">$0.00</td>
                         </tr>
                         <tr>
-                            <td class="task-desc">6. Update Facebook Page (Profile & Cover Image) https://www.facebook.com/sellingaccra</td>
+                            <td class="task-desc">6. Update Facebook Page (Profile &amp; Cover Image) https://www.facebook.com/sellingaccra</td>
                             <td><span class="status-badge status-completed">Completed</span></td>
                             <td class="text-right">2h</td>
                             <td class="text-right">$7.00</td>
@@ -609,18 +710,25 @@
                         <span>Total Due:</span>
                         <span>$133.00</span>
                     </div>
+                    <div class="summary-row paid-row">
+                        <span>Payment Received (Nov 5, 2026):</span>
+                        <span>−$133.00</span>
+                    </div>
+                    <div class="summary-row balance">
+                        <span>Balance Due:</span>
+                        <span>$0.00</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Wise Payment Integration -->
+            <!-- Payment Received Section -->
             <div class="payment-section">
                 <div class="payment-info">
-                    <h4>Make a Payment</h4>
-                    <p>Pay securely and instantly using Wise (formerly TransferWise).</p>
+                    <h4>Payment Received — Thank You!</h4>
+                    <p>Paid in full via Wise (formerly TransferWise). This invoice is now settled.</p>
+                    <p class="payment-ref">Reference: WISE-2026-1105-SELACRA</p>
                 </div>
-                <a href="https://wise.com/pay/me/briandalisayg1" target="_blank" class="wise-btn">
-                    Pay $133.00 via Wise
-                </a>
+                <span class="paid-chip">✓ Paid in Full</span>
             </div>
 
             <!-- Notes -->
